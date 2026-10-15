@@ -508,3 +508,49 @@
 </script>
 </body>
 </html>
+#!/usr/bin/env python3
+"""Applies the Lephas Company updates to your portfolio HTML.
+Usage:  python update_portfolio.py index.html      (writes index_updated.html, original untouched)
+Keep Lephas_Logo.svg in the same folder as this script."""
+import base64, re, sys
+from pathlib import Path
+ 
+src = Path(sys.argv[1] if len(sys.argv) > 1 else "index.html")
+html = src.read_text(encoding="utf-8")
+here = Path(__file__).parent
+LOGO = "data:image/svg+xml;base64," + base64.b64encode((here / "Lephas_Logo.svg").read_bytes()).decode()
+ 
+def step(name, ok): print(("OK      " if ok else "MISSING ") + name)
+ 
+# 1) About Me: remove email / phone / location rows (the Contact section at the bottom stays)
+html, n = re.subn(r'\s*<div class="info-row"><i class="fas fa-(?:envelope|phone|map-marker-alt)"></i>.*?</div></div></div>', "", html, flags=re.S)
+step(f"About Me contact rows removed ({n}/3)", n == 3)
+ 
+# 2) Experience: Ndovu Systems Limited -> Lephas Company Ltd, with logo and company details
+old = 'Ndovu Systems Limited <span'
+step("Experience company name", old in html)
+html = html.replace(old, 'Lephas Company Ltd <span')
+card = '<div class="tl-card" style="border-color:var(--accent);">'
+step("Experience card logo", card in html)
+html = html.replace(card, card + f'<img src="{LOGO}" alt="Lephas Company Ltd logo" class="company-logo"/>', 1)
+li = '<li>Driving technology adoption and digital transformation across sectors</li>'
+step("Experience company details", li in html)
+html = html.replace(li, li + '<li>Phone: 0728 700 329 &nbsp;·&nbsp; Email: lephascompany@gmail.com</li>', 1)
+ 
+# 3) Contact section: company email row -> Lephas, plus company phone row
+new_rows = (
+  '<a href="mailto:lephascompany@gmail.com" class="contact-row"><img src="%s" alt="" style="width:34px;height:34px;flex-shrink:0;"/>'
+  '<div><div class="contact-row-label">Company Email — Lephas Company Ltd</div><div class="contact-row-val">lephascompany@gmail.com</div></div></a>\n      '
+  '<a href="tel:+254728700329" class="contact-row"><i class="fas fa-phone" style="color:var(--accent2);"></i>'
+  '<div><div class="contact-row-label">Company Phone — Lephas Company Ltd</div><div class="contact-row-val">0728 700 329</div></div></a>' % LOGO)
+html, n = re.subn(r'<a href="mailto:ndovusystems@gmail\.com".*?</a>', lambda m: new_rows, html, count=1, flags=re.S)
+step("Contact company rows", n == 1)
+ 
+# 4) Styles for the logo
+css = ".company-logo{float:right;width:96px;height:96px;margin:0 0 .5rem 1rem;}@media(max-width:768px){.company-logo{width:72px;height:72px;}}\n  "
+step("Styles added", "</style>" in html)
+html = html.replace("</style>", css + "</style>", 1)
+ 
+out = src.with_name(src.stem + "_updated.html")
+out.write_text(html, encoding="utf-8")
+print("\nSaved:", out)
