@@ -155,8 +155,10 @@
       .nav-links{display:none;}
       nav{justify-content:center;}
     }
-  .company-logo{float:right;width:96px;height:96px;margin:0 0 .5rem 1rem;}
+  .company-logo{float:right;width:96px;height:96px;margin:0 0 .5rem 1rem;border-radius:50%;object-fit:cover;background:#fff;}
     @media(max-width:768px){.company-logo{width:72px;height:72px;}}
+    .org-logo{float:right;width:96px;height:96px;margin:0 0 .5rem 1rem;object-fit:contain;background:#fff;border-radius:12px;padding:6px;}
+    @media(max-width:768px){.org-logo{width:72px;height:72px;}}
   </style>
 </head>
 <body>
@@ -278,6 +280,17 @@
   <div class="sec-div fade-in"></div>
   <div class="projects-grid">
     <div class="proj-card fade-in">
+      <div class="proj-thumb" style="background:#fff;"><img src="heather-logo.png" alt="Heather AI" style="max-height:100%;max-width:100%;object-fit:contain;"/></div>
+      <div class="proj-body">
+        <div class="proj-title">Heather AI</div>
+        <div class="proj-desc">An offline-first hospital electronic medical records system. I built the full pharmacy dispensing module: permission-guarded, audited, synced and billed, with stock tracking and returns. Working on it since 16 October 2026.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">React</span><span class="proj-tag purple">Express</span><span class="proj-tag purple">SQLite</span><span class="proj-tag">JavaScript</span>
+        </div>
+        <a href="https://heather-ai.com.ng" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:.75rem;font-size:.85rem;display:inline-block;">🌐 Visit Heather AI</a>
+      </div>
+    </div>
+    <div class="proj-card fade-in">
       <div class="proj-thumb" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);">🌐</div>
       <div class="proj-body">
         <div class="proj-title">Church Communications Portal</div>
@@ -365,6 +378,39 @@
   <h2 class="sec-title fade-in">Career <span>Journey</span></h2>
   <div class="sec-div fade-in"></div>
   <div class="timeline">
+    <div class="tl-item fade-in">
+      <div class="tl-dot"></div>
+      <div class="tl-card" style="border-color:var(--accent2);">
+        <img src="heather-logo.png" alt="Heather AI logo" class="org-logo"/>
+        <div class="tl-org" style="color:var(--accent2);">Heather AI</div>
+        <div class="tl-role">Software Developer — Electronic Medical Records (EMR)</div>
+        <div class="tl-date"><i class="fas fa-calendar-alt"></i>&nbsp; 16 October 2026 – Present</div>
+        <ul class="tl-list">
+          <li>Completed the full pharmacy dispensing module for an offline-first hospital EMR, modelled on the OpenMRS dispensing workflow, with the pull request merged into main</li>
+          <li>Wrote the database migration following the team’s patterns: WAT time defaults, version tracking with update triggers, and soft deletes</li>
+          <li>Connected every write to the sync layer, with new sync handlers and registry entries, so records sync reliably between devices and the server</li>
+          <li>Guarded every route with permission checks (pharmacy:dispense) and audited every action in the service functions, following the existing patients service pattern</li>
+          <li>Integrated billing through the DrugDispensed event, moved stock updates to the point of dispensing, and handled returns through a DrugReturned event</li>
+          <li>Wrote 16 new dispensing tests, bringing the suite to 53 passing tests, and paused the NHIA lookup as directed</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item fade-in">
+      <div class="tl-dot"></div>
+      <div class="tl-card" style="border-color:var(--accent);">
+        <img src="afralti-logo.png" alt="AFRALTI logo" class="org-logo" onerror="this.style.display='none'"/>
+        <div class="tl-org" style="color:var(--accent);">African Advanced Level Telecommunications Institute (AFRALTI)</div>
+        <div class="tl-role">ICT Intern — ICT Section, Nairobi</div>
+        <div class="tl-date"><i class="fas fa-calendar-alt"></i>&nbsp; August 2026 – December 2026 &nbsp;·&nbsp; Internship Programme</div>
+        <ul class="tl-list">
+          <li>Assembled and terminated Ethernet cables, mainly Cat 6, for network connections</li>
+          <li>Supported network setup and troubleshooting for staff and training facilities</li>
+          <li>Prepared and maintained computer labs, including operating system reinstallation and printer setup</li>
+          <li>Helped prepare labs for exams and proctored exam sessions</li>
+          <li>Gave day-to-day technical support to staff and trainees, and kept weekly logbook records</li>
+        </ul>
+      </div>
+    </div>
     <div class="tl-item fade-in">
       <div class="tl-dot"></div>
       <div class="tl-card" style="border-color:var(--accent2);">
