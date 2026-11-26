@@ -40,6 +40,12 @@
 
     /* NAV */
     nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(224,244,255,0.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;justify-content:space-between;align-items:center;}
+    .menu-toggle{display:none;align-items:center;justify-content:center;width:44px;height:44px;padding:.65rem;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);cursor:pointer;}
+    .menu-toggle span{display:block;width:20px;height:2px;background:currentColor;border-radius:2px;transition:transform .2s,opacity .2s;}
+    .menu-toggle span+span{margin-top:5px;}
+    .menu-toggle[aria-expanded="true"] span:first-child{transform:translateY(7px) rotate(45deg);}
+    .menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
+    .menu-toggle[aria-expanded="true"] span:last-child{transform:translateY(-7px) rotate(-45deg);}
     .logo{font-size:1.4rem;font-weight:900;background:var(--rainbow);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:rainbowShift 6s linear infinite;}
     .nav-links{display:flex;gap:1.8rem;list-style:none;}
     .nav-links a{color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;transition:color .3s;}
@@ -167,8 +173,13 @@
       .hero-inner{gap:2rem;}
       .hero-photo{width:160px;height:160px;}
       .about-grid,.contact-grid{grid-template-columns:1fr;}
-      .nav-links{display:none;}
-      nav{justify-content:center;}
+      nav{justify-content:flex-start;padding:.55rem 1rem;}
+      .menu-toggle{display:block;}
+      .nav-links{display:none;position:absolute;top:calc(100% + .5rem);left:1rem;right:1rem;flex-direction:column;gap:0;padding:.5rem;background:rgba(255,255,255,.98);border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 30px rgba(15,23,42,.16);}
+      .nav-links.open{display:flex;}
+      .nav-links a{display:block;padding:.8rem 1rem;border-radius:8px;}
+      .nav-links a:hover{background:var(--bg);}
+      .logo{margin-left:1rem;}
     }
   .company-logo{float:right;width:96px;height:96px;margin:0 0 .5rem 1rem;border-radius:50%;object-fit:cover;background:#fff;}
     @media(max-width:768px){.company-logo{width:72px;height:72px;}}
@@ -179,8 +190,11 @@
 <body>
 
 <nav>
+  <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
+    <span></span><span></span><span></span>
+  </button>
   <div class="logo">PK.</div>
-  <ul class="nav-links">
+  <ul class="nav-links" id="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#languages">Languages</a></li>
     <li><a href="#projects">Projects</a></li>
@@ -534,6 +548,27 @@
 <footer><p>© 2026 <span class="rainbow-text">Prince Kimutai (Ndovu)</span> · Built with passion &amp; purpose @ <span class="rainbow-text">Lephas Company Ltd</span>.</p></footer>
 
 <script>
+  const menuToggle=document.querySelector(".menu-toggle");
+  const navLinks=document.querySelector(".nav-links");
+  menuToggle.addEventListener("click",()=>{
+    const isOpen=menuToggle.getAttribute("aria-expanded")==="true";
+    menuToggle.setAttribute("aria-expanded",String(!isOpen));
+    menuToggle.setAttribute("aria-label",isOpen?"Open navigation menu":"Close navigation menu");
+    navLinks.classList.toggle("open",!isOpen);
+  });
+  navLinks.querySelectorAll("a").forEach(link=>link.addEventListener("click",()=>{
+    menuToggle.setAttribute("aria-expanded","false");
+    menuToggle.setAttribute("aria-label","Open navigation menu");
+    navLinks.classList.remove("open");
+  }));
+  document.addEventListener("keydown",event=>{
+    if(event.key==="Escape"&&menuToggle.getAttribute("aria-expanded")==="true"){
+      menuToggle.setAttribute("aria-expanded","false");
+      menuToggle.setAttribute("aria-label","Open navigation menu");
+      navLinks.classList.remove("open");
+      menuToggle.focus();
+    }
+  });
   const glassPanel=document.querySelector('.hero-glass');
   if(glassPanel){
     const heroSec=document.getElementById('hero');
