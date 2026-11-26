@@ -5,8 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script>
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-    window.addEventListener("pageshow", () => {
-      if (!window.location.hash) window.scrollTo(0, 0);
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted) return;
+      if (window.location.hash) {
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
+      document.documentElement.style.scrollBehavior = "auto";
+      window.scrollTo(0, 0);
+      requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.style.removeProperty("scroll-behavior");
+      });
     });
   </script>
   <title>Prince Kimutai (Ndovu) | IT Portfolio</title>
